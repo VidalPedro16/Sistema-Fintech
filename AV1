@@ -1,0 +1,177 @@
+public abstract class Conta {
+    protected double saldo;
+
+    public Conta(double saldoInicial) {
+        this.saldo = saldoInicial;
+    }
+
+    public double getSaldo() {
+        return saldo;
+    }
+
+    public void depositar(double valor) {
+        if (valor > 0) {
+            saldo += valor;
+            Logger.log("Depósito de R$" + valor);
+        } else {
+            System.out.println("Valor inválido para depósito.");
+        }
+    }
+
+    public boolean sacar(double valor) {
+        if (valor > 0 && valor <= saldo) {
+            saldo -= valor;
+            Logger.log("Saque de R$" + valor);
+            return true;
+        } else {
+            System.out.println("Saldo insuficiente ou valor inválido.");
+            return false;
+        }
+    }
+}
+
+public class ContaCorrente extends Conta {
+    public ContaCorrente(double saldoInicial) {
+        super(saldoInicial);
+    }
+}
+
+public class Poupanca extends Conta {
+    public Poupanca(double saldoInicial) {
+        super(saldoInicial);
+    }
+}
+
+public class Aplicacoes extends Conta {
+    public Aplicacoes(double saldoInicial) {
+        super(saldoInicial);
+    }
+}
+
+public class Senha {
+    private final String senhaCorreta;
+
+    public Senha(String senha) {
+        this.senhaCorreta = senha;
+    }
+
+    public boolean autenticar(String senhaTentativa) {
+        return senhaCorreta.equals(senhaTentativa);
+    }
+}
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Logger {
+    private static List<String> historico = new ArrayList<>();
+
+    public static void log(String evento) {
+        historico.add(evento);
+    }
+
+    public static void exibirHistorico() {
+        if (historico.isEmpty()) {
+            System.out.println("Nenhum histórico disponível.");
+        } else {
+            System.out.println("Histórico de transações:");
+            for (String evento : historico) {
+                System.out.println(evento);
+            }
+        }
+    }
+}
+
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        ContaCorrente contaCorrente = new ContaCorrente(1000);
+        Poupanca poupanca = new Poupanca(500);
+        Aplicacoes aplicacoes = new Aplicacoes(2000);
+        Senha senha = new Senha("1234");
+
+        while (true) {
+            System.out.println("\n--- Menu ---");
+            System.out.println("1 - Depósito Conta Corrente");
+            System.out.println("2 - Saque Conta Corrente");
+            System.out.println("3 - Saldo Conta Corrente");
+            System.out.println("4 - Transferência CC -> Poupança");
+            System.out.println("5 - Transferência Poupança -> CC");
+            System.out.println("6 - Transferência CC -> Aplicações");
+            System.out.println("7 - Transferência Aplicações -> CC");
+            System.out.println("8 - Saldo Geral (com senha)");
+            System.out.println("0 - Sair");
+            System.out.print("Escolha uma opção: ");
+            int opcao = scanner.nextInt();
+
+            if (opcao == 0) break;
+
+            switch (opcao) {
+                case 1:
+                    System.out.print("Valor para depósito: ");
+                    double valorDeposito = scanner.nextDouble();
+                    contaCorrente.depositar(valorDeposito);
+                    break;
+                case 2:
+                    System.out.print("Valor para saque: ");
+                    double valorSaque = scanner.nextDouble();
+                    contaCorrente.sacar(valorSaque);
+                    break;
+                case 3:
+                    System.out.println("Saldo Conta Corrente: R$" + contaCorrente.getSaldo());
+                    break;
+                case 4:
+                    System.out.print("Valor para transferir para poupança: ");
+                    double valorTransferirPoupanca = scanner.nextDouble();
+                    if (contaCorrente.sacar(valorTransferirPoupanca)) {
+                        poupanca.depositar(valorTransferirPoupanca);
+                        Logger.log("Transferência CC -> Poupança de R$" + valorTransferirPoupanca);
+                    }
+                    break;
+                case 5:
+                    System.out.print("Valor para transferir para CC: ");
+                    double valorTransferirCC = scanner.nextDouble();
+                    if (poupanca.sacar(valorTransferirCC)) {
+                        contaCorrente.depositar(valorTransferirCC);
+                        Logger.log("Transferência Poupança -> CC de R$" + valorTransferirCC);
+                    }
+                    break;
+                case 6:
+                    System.out.print("Valor para transferir para aplicações: ");
+                    double valorParaAplicacoes = scanner.nextDouble();
+                    if (contaCorrente.sacar(valorParaAplicacoes)) {
+                        aplicacoes.depositar(valorParaAplicacoes);
+                        Logger.log("Transferência CC -> Aplicações de R$" + valorParaAplicacoes);
+                    }
+                    break;
+                case 7:
+                    System.out.print("Valor para transferir para CC: ");
+                    double valorDeAplicacoes = scanner.nextDouble();
+                    if (aplicacoes.sacar(valorDeAplicacoes)) {
+                        contaCorrente.depositar(valorDeAplicacoes);
+                        Logger.log("Transferência Aplicações -> CC de R$" + valorDeAplicacoes);
+                    }
+                    break;
+                case 8:
+                    System.out.print("Digite a senha: ");
+                    String senhaTentativa = scanner.next();
+                    if (senha.autenticar(senhaTentativa)) {
+                        double saldoGeral = contaCorrente.getSaldo() + poupanca.getSaldo() + aplicacoes.getSaldo();
+                        System.out.println("Saldo Geral: R$" + saldoGeral);
+                        Logger.log("Consulta de Saldo Geral.");
+                    } else {
+                        System.out.println("Senha incorreta.");
+                    }
+                    break;
+                default:
+                    System.out.println("Opção inválida.");
+            }
+        }
+
+        System.out.println("Sistema encerrado.");
+        scanner.close();
+    }
+}
+
