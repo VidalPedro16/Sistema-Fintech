@@ -17,4 +17,6 @@ Classes a serem criadas:
 3 - Aplicações
 4 - Senha
 5 - Historico (Logger)
+6 - Main
+7 - Conta
 
