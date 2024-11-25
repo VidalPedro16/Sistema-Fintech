@@ -1,0 +1,31 @@
+public abstract class Conta {
+    protected double saldo;
+
+    public Conta(double saldoInicial) {
+        this.saldo = saldoInicial;
+    }
+
+    public double getSaldo() {
+        return saldo;
+    }
+
+    public void depositar(double valor) {
+        if (valor > 0) {
+            saldo += valor;
+            Logger.log("Depósito de R$" + valor);
+        } else {
+            System.out.println("Valor inválido para depósito.");
+        }
+    }
+
+    public boolean sacar(double valor) {
+        if (valor > 0 && valor <= saldo) {
+            saldo -= valor;
+            Logger.log("Saque de R$" + valor);
+            return true;
+        } else {
+            System.out.println("Saldo insuficiente ou valor inválido.");
+            return false;
+        }
+    }
+}
