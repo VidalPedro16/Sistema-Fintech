@@ -1,0 +1,11 @@
+public class Senha {
+    private final String senhaCorreta;
+
+    public Senha(String senha) {
+        this.senhaCorreta = senha;
+    }
+
+    public boolean autenticar(String senhaTentativa) {
+        return senhaCorreta.equals(senhaTentativa);
+    }
+}
