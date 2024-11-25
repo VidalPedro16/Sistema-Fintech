@@ -18,8 +18,3 @@ Classes a serem criadas:
 4 - Senha
 5 - Historico (Logger)
 
-Trabalho feito em grupo: 
-1. Caio Paiva Santos: 423104217
-2. Enzo Sevilhano de Oliveira: 423104515
-3. Isaac Marcelino: 423106509
-4. Pedro Vidal Grilo: 424109648
