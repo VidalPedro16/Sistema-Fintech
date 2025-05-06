@@ -1,6 +1,8 @@
 # Sistema-Fintech
 Crie um sistema em Java - Cliente para uma Fintech
 
+##
+
 Menu de opções: (senha)
 
 1 - Deposito Conta corrente
@@ -18,6 +20,8 @@ Menu de opções: (senha)
 7 - transferência Aplicações -> Conta Corrente
 
 8 - Saldo Geral (com senha)
+
+##
 
 Classes a serem criadas:
 
